@@ -1,6 +1,5 @@
 import datetime
 from minio import Minio
-from minio.error import InvalidResponseError
 from collections import defaultdict
 
 # For access
@@ -11,7 +10,15 @@ mySecretKey   = 'my_secret_key'
 # The path that will be recursively downloaded
 myBucketName = 'my_bucket_name'
 myPathName   = 'my_path_name'
-myRewind     = datetime.datetime(2023,5,11,18,0,0) # Should become a different notation: 2023.05.10T16:00
+myRewind     = '2023.05.10T16:00' # Notation that mc uses
+
+# Convert to something that minio-py understands
+myYear   = int(myRewind[0:4])
+myMonth  = int(myRewind[5:7])
+myDay    = int(myRewind[8:10])
+myHour   = int(myRewind[11:13])
+myMinute = int(myRewind[14:16])
+myRewindDatetime = datetime.datetime(myYear,myMonth,myDay,myHour,myMinute)
 
 # Connect to Minio
 client = Minio(myMinioServer,
@@ -25,7 +32,7 @@ objectList = client.list_objects(myBucketName,
                                  include_version=True)
 
 # Filter on versions from before a certain timestamp
-before = filter(lambda o: o._last_modified.replace(tzinfo=None) < myRewind, objectList)
+before = filter(lambda o: o._last_modified.replace(tzinfo=None) < myRewindDatetime, objectList)
 
 # Store collection of object names, with all remaining revisions
 revisions = defaultdict(list)
