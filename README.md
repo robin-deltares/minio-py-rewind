@@ -18,8 +18,8 @@ myPathName   = 'my_path_name'
 myRewind     = '2023.05.10T16:00' # Notation that mc uses
 
 myClient = Minio(myMinioServer,
-               access_key=myAccessKey,
-               secret_key=mySecretKey)
+                 access_key=myAccessKey,
+                 secret_key=mySecretKey)
 
 rewinder = minioPyRewind.Rewinder(myClient,myRewind)
 
