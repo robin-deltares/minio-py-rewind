@@ -17,11 +17,14 @@ myBucketName = 'my_bucket_name'
 myPathName   = 'my_path_name'
 myRewind     = '2023.05.10T16:00' # Notation that mc uses
 
+# Minio client connection
 myClient = Minio(myMinioServer,
                  access_key=myAccessKey,
                  secret_key=mySecretKey)
 
+# Prepare the rewind-settings
 rewinder = minioPyRewind.Rewinder(myClient,myRewind)
 
+# Download the objects
 rewinder.download(myBucketName,myPathName)
 ```
